@@ -17,16 +17,13 @@ TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
 
 #===[ Class(es) ]===
-class MediaLibraryGui(object):
+class MainMenu(tk.Frame):
     
     def __init__(self):
-        pass
-    
-    def add_new_entry(self):
-        pass
-    
-    def mainloop(self):
-        pass
+        tk.Frame.__init__(self)
+        self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
+        self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+
     
 #===[ Global Function(s) ]===
 
@@ -37,5 +34,10 @@ if __name__ == "__main__":
     games = pickle.load(datafile)
     datafile.close()
     
-    media_library_gui = MediaLibraryGui()
-    media_library_gui.mainloop()
+    root = tk.Tk()
+    root.title("Media Library")
+    root.geometry("500x500")
+    
+    main_menu = MainMenu()
+    
+    root.mainloop()
