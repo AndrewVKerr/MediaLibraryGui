@@ -9,6 +9,12 @@ This program is used to keep track of game entrys, the ability to add/remove/edi
 
 #===[ Import(s) ]===
 import pickle
+import tkinter as tk
+from tkinter import scrolledtext
+
+#===[ Constant(s) ]===
+TITLE_FONT = ("Times New Roman", 24)
+BUTTON_FONT = ("Arial", 15)
 
 #===[ Class(es) ]===
 class MediaLibraryGui(object):
@@ -21,8 +27,15 @@ class MediaLibraryGui(object):
     
     def mainloop(self):
         pass
+    
+#===[ Global Function(s) ]===
+
 
 #===[ Main ]===
 if __name__ == "__main__":
+    datafile = open("game_lib.pickle","rb")
+    games = pickle.load(datafile)
+    datafile.close()
+    
     media_library_gui = MediaLibraryGui()
     media_library_gui.mainloop()
