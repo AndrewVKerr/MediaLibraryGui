@@ -21,9 +21,23 @@ class MainMenu(tk.Frame):
     
     def __init__(self):
         tk.Frame.__init__(self)
-        self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
+        self.lbl_title = tk.Label(text="Game Library", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
-
+        
+        self.btn_add = tk.Button(text="Add",font=BUTTON_FONT)
+        self.btn_add.grid(row=1,column=1)
+        
+        self.btn_edit = tk.Button(text="Edit",font=BUTTON_FONT)
+        self.btn_edit.grid(row=2,column=1) 
+        
+        self.btn_search = tk.Button(text="Search",font=BUTTON_FONT)
+        self.btn_search.grid(row=3,column=1)
+        
+        self.btn_remove = tk.Button(text="Remove",font=BUTTON_FONT)
+        self.btn_remove.grid(row=4,column=1)
+        
+        self.btn_save = tk.Button(text="Save",font=BUTTON_FONT)
+        self.btn_save.grid(row=5,column=1)        
     
 #===[ Global Function(s) ]===
 
