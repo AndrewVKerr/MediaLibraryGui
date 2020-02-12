@@ -20,6 +20,11 @@ class MainMenu(tk.Frame):
     
     def __init__(self):
         tk.Frame.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)        
+        
         self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
@@ -160,10 +165,10 @@ class EditSelectionMenu(tk.Frame):
         self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
         self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
-        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=2,column=0,sticky="news")
         
-        self.btn_select = tk.Button(self,text="Select")
+        self.btn_select = tk.Button(self,text="Select",font=BUTTON_FONT)
         self.btn_select.grid(row=2,column=2,sticky="news")     
         
 class EditEntryMenu(tk.Frame):
@@ -250,13 +255,13 @@ class EditEntryMenu(tk.Frame):
         
         self.grid_rowconfigure(6,weight=1)
         
-        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=8,column=1,sticky="news")
         
-        self.btn_reset = tk.Button(self,text="Reset")
+        self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
         self.btn_reset.grid(row=8,column=2,sticky="news")        
         
-        self.btn_confirm = tk.Button(self,text="Confirm")
+        self.btn_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT)
         self.btn_confirm.grid(row=8,column=3,sticky="news")
         
 class RemoveSelectionMenu(tk.Frame):
@@ -279,10 +284,10 @@ class RemoveSelectionMenu(tk.Frame):
         self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
         self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
-        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=2,column=0,sticky="news")
         
-        self.btn_select = tk.Button(self,text="Select")
+        self.btn_select = tk.Button(self,text="Select",font=BUTTON_FONT)
         self.btn_select.grid(row=2,column=2,sticky="news")          
         
         
@@ -303,10 +308,10 @@ class RemoveConfirmMenu(tk.Frame):
         
         self.grid_rowconfigure(1,weight=1)
         
-        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=2,column=0,sticky="news")
         
-        self.btn_confirm = tk.Button(self,text="Confirm?")
+        self.btn_confirm = tk.Button(self,text="Confirm?",font=BUTTON_FONT)
         self.btn_confirm.grid(row=2,column=2,sticky="news") 
         
 #===[ Global Function(s) ]===
