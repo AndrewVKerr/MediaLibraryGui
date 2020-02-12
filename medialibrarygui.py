@@ -339,11 +339,11 @@ if __name__ == "__main__":
     editEntryMenu = EditEntryMenu()
     editEntryMenu.grid(row=0,column=0,sticky="news")
     
-    remove_selection_menu = RemoveSelectionMenu()
-    remove_selection_menu.grid(row=0,column=0,sticky="news")
+    removeSelectionMenu = RemoveSelectionMenu()
+    removeSelectionMenu.grid(row=0,column=0,sticky="news")
     
-    remove_confirm_menu = RemoveConfirmMenu()
-    remove_confirm_menu.grid(row=0,column=0,sticky="news")
+    removeConfirmMenu = RemoveConfirmMenu()
+    removeConfirmMenu.grid(row=0,column=0,sticky="news")
     
     mainMenu.tkraise()
     
