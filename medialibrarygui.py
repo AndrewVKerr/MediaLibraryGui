@@ -134,8 +134,180 @@ class FileSaved(tk.Frame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=1)
         
-        self.lbl_title = tk.Label(self,text="Search", font=TITLE_FONT)
+        self.lbl_title = tk.Label(self,text="File Saved", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        self.btn_okay = tk.Button(self,text="Ok")
+        self.btn_okay.grid(row=1,column=1)
+        
+class EditSelectionMenu(tk.Frame):
+    
+    def __init__(self):
+        tk.Frame.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        
+        self.lbl_title = tk.Label(self,text="Which title to edit?", font=TITLE_FONT)
+        self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        options = ["one","two"]
+        
+        self.tkvar_title = tk.StringVar(self)
+        self.tkvar_title.set(options[0])
+        
+        self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
+        self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
+        
+        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel.grid(row=2,column=0,sticky="news")
+        
+        self.btn_select = tk.Button(self,text="Select")
+        self.btn_select.grid(row=2,column=2,sticky="news")     
+        
+class EditEntryMenu(tk.Frame):
+    
+    def __init__(self):
+        tk.Frame.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        self.grid_columnconfigure(3, weight=1)  
+        self.grid_columnconfigure(4, weight=1) 
+        
+        self.lbl_title = tk.Label(self,text="Edit Game", font=TITLE_FONT)
+        self.lbl_title.grid(row=0,column=0,columnspan=4,sticky="news")
+        
+        self.lbl_genre = tk.Label(self,text="Genre: ")
+        self.lbl_genre.grid(row=1,column=0,sticky="nes")
+        
+        self.ent_genre = tk.Entry(self)
+        self.ent_genre.grid(row=1,column=1,sticky="nws")   
+        
+        self.lbl_title = tk.Label(self,text="Title: ")
+        self.lbl_title.grid(row=1,column=2,sticky="nes")
+        
+        self.ent_title = tk.Entry(self)
+        self.ent_title.grid(row=1,column=3,sticky="nws")
+        
+        self.lbl_company = tk.Label(self,text="Company: ")
+        self.lbl_company.grid(row=2,column=0,sticky="nes")
+        
+        self.ent_company = tk.Entry(self)
+        self.ent_company.grid(row=2,column=1,sticky="nws")           
+        
+        self.lbl_publisher = tk.Label(self,text="Publisher: ")
+        self.lbl_publisher.grid(row=2,column=2,sticky="nes")
+        
+        self.ent_publisher = tk.Entry(self)
+        self.ent_publisher.grid(row=2,column=3,sticky="nws")           
+        
+        self.lbl_console = tk.Label(self,text="Console: ")
+        self.lbl_console.grid(row=3,column=0,sticky="nes")
+        
+        self.ent_console = tk.Entry(self)
+        self.ent_console.grid(row=3,column=1,sticky="nws")     
+        
+        self.lbl_release_year = tk.Label(self,text="Release Year: ")
+        self.lbl_release_year.grid(row=3,column=2,sticky="nes")
+        
+        self.ent_release_year = tk.Entry(self)
+        self.ent_release_year.grid(row=3,column=3,sticky="nws")   
+        
+        self.lbl_rating = tk.Label(self,text="Rating: ")
+        self.lbl_rating.grid(row=4,column=0,sticky="nes")
+        
+        self.ent_rating = tk.Entry(self)
+        self.ent_rating.grid(row=4,column=1,sticky="nws")   
+        
+        self.lbl_multi_single = tk.Label(self,text="Player Mode: ")
+        self.lbl_multi_single.grid(row=4,column=2,sticky="nes")
+        
+        options = ["Multi","Single"]
+        
+        self.tkvar_multi_single = tk.StringVar(self)
+        self.tkvar_multi_single.set(options[0])
+        
+        self.ent_multi_single = tk.OptionMenu(self,self.tkvar_multi_single,*options)
+        self.ent_multi_single.grid(row=4,column=3,sticky="news")   
+
+        self.lbl_price = tk.Label(self,text="Price: ")
+        self.lbl_price.grid(row=5,column=0,sticky="nes")
+        
+        self.ent_price = tk.Entry(self)
+        self.ent_price.grid(row=5,column=1,sticky="nws")           
+        
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.chk_beaten.grid(row=5,column=3,sticky="nws")
+        
+        self.lbl_notes = tk.Label(self,text="Notes:")
+        self.lbl_notes.grid(row=6,column=0,sticky="ne")
+        
+        self.scr_notes = ScrolledText(self,width=40,height=8)
+        self.scr_notes.grid(row=6,column=1,columnspan=3,rowspan=2,sticky="news")
+        
+        self.grid_rowconfigure(6,weight=1)
+        
+        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel.grid(row=8,column=1,sticky="news")
+        
+        self.btn_reset = tk.Button(self,text="Reset")
+        self.btn_reset.grid(row=8,column=2,sticky="news")        
+        
+        self.btn_confirm = tk.Button(self,text="Confirm")
+        self.btn_confirm.grid(row=8,column=3,sticky="news")
+        
+class RemoveSelectionMenu(tk.Frame):
+    
+    def __init__(self):
+        tk.Frame.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        
+        self.lbl_title = tk.Label(self,text="Which title to remove?", font=TITLE_FONT)
+        self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        options = ["one","two"]
+        
+        self.tkvar_title = tk.StringVar(self)
+        self.tkvar_title.set(options[0])
+        
+        self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
+        self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
+        
+        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel.grid(row=2,column=0,sticky="news")
+        
+        self.btn_select = tk.Button(self,text="Select")
+        self.btn_select.grid(row=2,column=2,sticky="news")          
+        
+        
+class RemoveConfirmMenu(tk.Frame):
+    
+    def __init__(self):
+        tk.Frame.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        
+        self.lbl_title = tk.Label(self,text="These games are marked for Removal?", font=TITLE_FONT)
+        self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        self.scr_marked_entrys = ScrolledText(self,width=40,height=8)
+        self.scr_marked_entrys.grid(row=1,column=0,columnspan=3,sticky="news")
+        
+        self.grid_rowconfigure(1,weight=1)
+        
+        self.btn_cancel = tk.Button(self,text="Cancel")
+        self.btn_cancel.grid(row=2,column=0,sticky="news")
+        
+        self.btn_confirm = tk.Button(self,text="Confirm?")
+        self.btn_confirm.grid(row=2,column=2,sticky="news") 
         
 #===[ Global Function(s) ]===
 
@@ -152,10 +324,27 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    main_menu = MainMenu()
-    main_menu.grid(row=0,column=0,sticky="news")
+    mainMenu = MainMenu()
+    mainMenu.grid(row=0,column=0,sticky="news")
     
-    search_menu = SearchMenu()
-    search_menu.grid(row=0,column=0,sticky="news")
+    searchMenu = SearchMenu()
+    searchMenu.grid(row=0,column=0,sticky="news")
+    
+    fileSaved = FileSaved()
+    fileSaved.grid(row=0,column=0,sticky="news")
+    
+    editSelectionMenu = EditSelectionMenu()
+    editSelectionMenu.grid(row=0,column=0,sticky="news")
+    
+    editEntryMenu = EditEntryMenu()
+    editEntryMenu.grid(row=0,column=0,sticky="news")
+    
+    remove_selection_menu = RemoveSelectionMenu()
+    remove_selection_menu.grid(row=0,column=0,sticky="news")
+    
+    remove_confirm_menu = RemoveConfirmMenu()
+    remove_confirm_menu.grid(row=0,column=0,sticky="news")
+    
+    mainMenu.tkraise()
     
     root.mainloop()
