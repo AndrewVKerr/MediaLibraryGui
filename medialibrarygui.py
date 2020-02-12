@@ -58,8 +58,12 @@ class SearchMenu(tk.Frame):
         self.lbl_search_by = tk.Label(self,text="Search by:")
         self.lbl_search_by.grid(row=1,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=2,column=0,sticky="nw")           
+        options = ["Genre","Title","Company","Publisher","Console","Release Year","Rating","Multi/Single player","Price","Beaten","Date Purchase"]
+        self.tkvar_search_by = tk.StringVar(self)
+        self.tkvar_search_by.set(options[1])
+        
+        self.drp_search_by = tk.OptionMenu(self,self.tkvar_search_by,*options)
+        self.drp_search_by.grid(row=2,column=0,sticky="new")           
         
         self.lbl_search_for = tk.Label(self,text="Search for:")
         self.lbl_search_for.grid(row=3,column=0,sticky="sw")
@@ -325,7 +329,7 @@ if __name__ == "__main__":
     
     root = tk.Tk()
     root.title("Media Library")
-    root.geometry("500x500")
+    #root.geometry("500x500")
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
@@ -351,5 +355,6 @@ if __name__ == "__main__":
     removeConfirmMenu.grid(row=0,column=0,sticky="news")
     
     mainMenu.tkraise()
+    searchMenu.tkraise()
     
     root.mainloop()
