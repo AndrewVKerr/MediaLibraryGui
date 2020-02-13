@@ -62,8 +62,8 @@ class SearchMenu(tk.Frame):
         self.tkvar_search_by = tk.StringVar(self)
         self.tkvar_search_by.set(options[1])
         
-        self.drp_search_by = tk.OptionMenu(self,self.tkvar_search_by,*options)
-        self.drp_search_by.grid(row=2,column=0,sticky="new")           
+        self.dbx_search_by = tk.OptionMenu(self,self.tkvar_search_by,*options)
+        self.dbx_search_by.grid(row=2,column=0,sticky="new")           
         
         self.lbl_search_for = tk.Label(self,text="Search for:")
         self.lbl_search_for.grid(row=3,column=0,sticky="sw")
@@ -166,8 +166,8 @@ class EditSelectionMenu(tk.Frame):
         self.tkvar_title = tk.StringVar(self)
         self.tkvar_title.set(options[0])
         
-        self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
-        self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
+        self.dbx_title = tk.OptionMenu(self,self.tkvar_title,*options)
+        self.dbx_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
         self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=2,column=0,sticky="news")
@@ -248,25 +248,31 @@ class EditEntryMenu(tk.Frame):
         self.ent_price = tk.Entry(self)
         self.ent_price.grid(row=5,column=1,sticky="nws")           
         
+        self.lbl_date_purchased = tk.Label(self,text="Date Purchased: ")
+        self.lbl_date_purchased.grid(row=5,column=2,sticky="nes")
+        
+        self.ent_date_purchased = tk.Entry(self)
+        self.ent_date_purchased.grid(row=5,column=3,sticky="nws")           
+        
         self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
-        self.chk_beaten.grid(row=5,column=3,sticky="nws")
+        self.chk_beaten.grid(row=6,column=3,sticky="nws")
         
         self.lbl_notes = tk.Label(self,text="Notes:")
-        self.lbl_notes.grid(row=6,column=0,sticky="ne")
+        self.lbl_notes.grid(row=7,column=0,sticky="ne")
         
         self.scr_notes = ScrolledText(self,width=40,height=8)
-        self.scr_notes.grid(row=6,column=1,columnspan=3,rowspan=2,sticky="news")
+        self.scr_notes.grid(row=7,column=1,columnspan=3,rowspan=2,sticky="news")
         
-        self.grid_rowconfigure(6,weight=1)
+        self.grid_rowconfigure(7,weight=1)
         
         self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
-        self.btn_cancel.grid(row=8,column=1,sticky="news")
+        self.btn_cancel.grid(row=9,column=1,sticky="news")
         
         self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
-        self.btn_reset.grid(row=8,column=2,sticky="news")        
+        self.btn_reset.grid(row=9,column=2,sticky="news")        
         
         self.btn_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT)
-        self.btn_confirm.grid(row=8,column=3,sticky="news")
+        self.btn_confirm.grid(row=9,column=3,sticky="news")
         
 class RemoveSelectionMenu(tk.Frame):
     
@@ -285,8 +291,8 @@ class RemoveSelectionMenu(tk.Frame):
         self.tkvar_title = tk.StringVar(self)
         self.tkvar_title.set(options[0])
         
-        self.drp_title = tk.OptionMenu(self,self.tkvar_title,*options)
-        self.drp_title.grid(row=1,column=0,columnspan=3,sticky="news")
+        self.dbx_title = tk.OptionMenu(self,self.tkvar_title,*options)
+        self.dbx_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
         self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT)
         self.btn_cancel.grid(row=2,column=0,sticky="news")
@@ -333,28 +339,27 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    mainMenu = MainMenu()
-    mainMenu.grid(row=0,column=0,sticky="news")
+    frm_main_menu = MainMenu()
+    frm_main_menu.grid(row=0,column=0,sticky="news")
     
-    searchMenu = SearchMenu()
-    searchMenu.grid(row=0,column=0,sticky="news")
+    frm_search_menu = SearchMenu()
+    frm_search_menu.grid(row=0,column=0,sticky="news")
     
-    fileSaved = FileSaved()
-    fileSaved.grid(row=0,column=0,sticky="news")
+    frm_file_saved = FileSaved()
+    frm_file_saved.grid(row=0,column=0,sticky="news")
     
-    editSelectionMenu = EditSelectionMenu()
-    editSelectionMenu.grid(row=0,column=0,sticky="news")
+    frm_edit_selection_menu = EditSelectionMenu()
+    frm_edit_selection_menu.grid(row=0,column=0,sticky="news")
     
-    editEntryMenu = EditEntryMenu()
-    editEntryMenu.grid(row=0,column=0,sticky="news")
+    frm_edit_entry_menu = EditEntryMenu()
+    frm_edit_entry_menu.grid(row=0,column=0,sticky="news")
     
-    removeSelectionMenu = RemoveSelectionMenu()
-    removeSelectionMenu.grid(row=0,column=0,sticky="news")
+    frm_remove_selection_menu = RemoveSelectionMenu()
+    frm_remove_selection_menu.grid(row=0,column=0,sticky="news")
     
-    removeConfirmMenu = RemoveConfirmMenu()
-    removeConfirmMenu.grid(row=0,column=0,sticky="news")
+    frm_remove_confirm_menu = RemoveConfirmMenu()
+    frm_remove_confirm_menu.grid(row=0,column=0,sticky="news")
     
-    mainMenu.tkraise()
-    searchMenu.tkraise()
+    frm_edit_entry_menu.tkraise()
     
     root.mainloop()
