@@ -26,6 +26,13 @@ class Screen(tk.Frame):
         
     def switch_frame():
         screens[Screen.current].tkraise()
+        
+    def grid(self,*args, **kwargs):
+        if("in_" in kwargs):
+            kwargs["in"] = kwargs["in_"]
+            self.master = kwargs["in_"]
+        print(kwargs)
+        tk.Frame.grid(self,*args, **kwargs)
 
 class MainMenu(Screen):
     
@@ -59,8 +66,12 @@ class MainMenu(Screen):
         Screen.switch_frame()
         
     def go_edit(self):
-        Screen.current = 2
-        Screen.switch_frame()
+        #Screen.current = 2
+        #Screen.switch_frame()
+        pop_up = tk.Tk()
+        pop_up.title("Edit Selection")
+        screens[2].grid(in_=pop_up,row=0,column=0,sticky="news")
+        
         
     def go_search(self):
         Screen.current = 4
@@ -174,7 +185,7 @@ class PrintFilters(tk.Frame):
         self.chk_notes.grid(row=3,column=2,sticky="nsw")           
         
 
-class FileSaved(Screen):
+'''class FileSaved(Screen):
     
     def __init__(self):
         Screen.__init__(self)
@@ -191,7 +202,7 @@ class FileSaved(Screen):
         
     def go_ok(self):
         Screen.current = 0
-        Screen.switch_frame()     
+        Screen.switch_frame()     '''
         
 class EditSelectionMenu(Screen):
     
@@ -537,17 +548,17 @@ if __name__ == "__main__":
     #5) Search
     #6) RemoveSelect
     #7) RemoveConfirm
-    #8) FileSaved
-    screens = [MainMenu(),AddEntryMenu(),EditSelectionMenu(),EditEntryMenu(),SearchMenu(),RemoveSelectionMenu(),RemoveConfirmMenu(),FileSaved()]
+    #8) FileSaved - No longer exists
+    screens = [MainMenu(),AddEntryMenu(),EditSelectionMenu(),EditEntryMenu(),SearchMenu(),RemoveSelectionMenu(),RemoveConfirmMenu()]
     
     screens[0].grid(row=0,column=0,sticky="news")
     screens[1].grid(row=0,column=0,sticky="news")
-    screens[2].grid(row=0,column=0,sticky="news")
+    #screens[2].grid(row=0,column=0,sticky="news") Removed for popup
     screens[3].grid(row=0,column=0,sticky="news")
     screens[4].grid(row=0,column=0,sticky="news")
-    screens[5].grid(row=0,column=0,sticky="news")
+    #screens[5].grid(row=0,column=0,sticky="news") Removed for popup
     screens[6].grid(row=0,column=0,sticky="news")
-    screens[7].grid(row=0,column=0,sticky="news")
+    #screens[7].grid(row=0,column=0,sticky="news") Removed since FileSelect no longer exists.
     
     screens[0].tkraise()
     
