@@ -175,7 +175,7 @@ class PrintFilters(tk.Frame):
         self.chk_purchase_date.grid(row=3,column=1,sticky="nsw")
         
         self.chk_notes = tk.Checkbutton(self,text="Notes")
-        self.chk_notes.grid(row=3,column=2,sticky="nsw")           
+        self.chk_notes.grid(row=3,column=2,sticky="nsw") 
         
 
 '''class FileSaved(Screen):
@@ -197,10 +197,10 @@ class PrintFilters(tk.Frame):
         Screen.current = 0
         Screen.switch_frame()     '''
         
-class EditSelectionMenu(Screen):
+class EditSelectionMenu(tk.Frame):
     
     def __init__(self,master=None):
-        Screen.__init__(self,master)
+        tk.Frame.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -224,7 +224,7 @@ class EditSelectionMenu(Screen):
         self.btn_select.grid(row=2,column=2,sticky="news")   
         
     def go_cancel(self):
-        self.master.withdraw()
+        self.master.destroy()
         Screen.current = 0
         Screen.switch_frame()  
         
@@ -454,10 +454,10 @@ class AddEntryMenu(Screen):
             Screen.current = 0
             Screen.switch_frame()
         
-class RemoveSelectionMenu(Screen):
+class RemoveSelectionMenu(tk.Frame):
     
     def __init__(self,master=None):
-        Screen.__init__(self,master)
+        tk.Frame.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
