@@ -21,23 +21,16 @@ class Screen(tk.Frame):
     
     current = 0
     
-    def __init__(self):
-        tk.Frame.__init__(self)
+    def __init__(self,master):
+        tk.Frame.__init__(self,master)
         
     def switch_frame():
         screens[Screen.current].tkraise()
-        
-    def grid(self,*args, **kwargs):
-        if("in_" in kwargs):
-            kwargs["in"] = kwargs["in_"]
-            self.master = kwargs["in_"]
-        print(kwargs)
-        tk.Frame.grid(self,*args, **kwargs)
 
 class MainMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -70,25 +63,25 @@ class MainMenu(Screen):
         #Screen.switch_frame()
         pop_up = tk.Tk()
         pop_up.title("Edit Selection")
-        screens[2].grid(in_=pop_up,row=0,column=0,sticky="news")
+        editSelect = EditSelectionMenu(master=pop_up)
+        editSelect.grid(row=0,column=0,sticky="news")
         
         
     def go_search(self):
-        Screen.current = 4
+        Screen.current = 3
         Screen.switch_frame()        
         
     def go_remove(self):
-        Screen.current = 5
+        Screen.current = 4
         Screen.switch_frame()    
         
     def go_save(self):
-        Screen.current = 7
-        Screen.switch_frame()    
+        print("Saved")    
 
 class SearchMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -206,8 +199,8 @@ class PrintFilters(tk.Frame):
         
 class EditSelectionMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -231,18 +224,20 @@ class EditSelectionMenu(Screen):
         self.btn_select.grid(row=2,column=2,sticky="news")   
         
     def go_cancel(self):
+        self.master.withdraw()
         Screen.current = 0
         Screen.switch_frame()  
         
     def select(self):
-        Screen.current = 3
+        self.master.withdraw()
+        Screen.current = 2
         Screen.switch_frame() 
         
         
 class EditEntryMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -351,8 +346,8 @@ class EditEntryMenu(Screen):
         
 class AddEntryMenu(Screen):
             
-        def __init__(self):
-            Screen.__init__(self)
+        def __init__(self,master=None):
+            Screen.__init__(self,master)
             
             self.grid_columnconfigure(0, weight=1)
             self.grid_columnconfigure(1, weight=1)
@@ -461,8 +456,8 @@ class AddEntryMenu(Screen):
         
 class RemoveSelectionMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -490,14 +485,14 @@ class RemoveSelectionMenu(Screen):
         Screen.switch_frame()  
         
     def go_select(self):
-        Screen.current = 6
+        Screen.current = 4
         Screen.switch_frame()
         
         
 class RemoveConfirmMenu(Screen):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self,master=None):
+        Screen.__init__(self,master)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -539,26 +534,14 @@ if __name__ == "__main__":
     #root.geometry("500x500")
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
-    
-    #screens:
-    #1) Main
-    #2) Add
-    #3) EditSelect
-    #4) EditEntry
-    #5) Search
-    #6) RemoveSelect
-    #7) RemoveConfirm
-    #8) FileSaved - No longer exists
-    screens = [MainMenu(),AddEntryMenu(),EditSelectionMenu(),EditEntryMenu(),SearchMenu(),RemoveSelectionMenu(),RemoveConfirmMenu()]
+
+    screens = [MainMenu(),AddEntryMenu(),EditEntryMenu(),SearchMenu(),RemoveConfirmMenu()]
     
     screens[0].grid(row=0,column=0,sticky="news")
     screens[1].grid(row=0,column=0,sticky="news")
-    #screens[2].grid(row=0,column=0,sticky="news") Removed for popup
+    screens[2].grid(row=0,column=0,sticky="news")
     screens[3].grid(row=0,column=0,sticky="news")
     screens[4].grid(row=0,column=0,sticky="news")
-    #screens[5].grid(row=0,column=0,sticky="news") Removed for popup
-    screens[6].grid(row=0,column=0,sticky="news")
-    #screens[7].grid(row=0,column=0,sticky="news") Removed since FileSelect no longer exists.
     
     screens[0].tkraise()
     
