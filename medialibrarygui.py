@@ -243,6 +243,7 @@ class EditSelectionMenu(tk.Frame):
             for i in range(len(self.options)):
                 if self.options[i] == title:
                     screens[Screen.current].edit_key = i
+                    break
             screens[Screen.current].update()
             Screen.switch_frame()
             
@@ -311,13 +312,13 @@ class EditEntryMenu(Screen):
         self.lbl_multi_single = tk.Label(self,text="Player Mode: ")
         self.lbl_multi_single.grid(row=4,column=2,sticky="nes")
         
-        options = ["Multi","Single"]
+        self.options = ["Please select an option.","Multi","Single","Both"]
         
         self.tkvar_multi_single = tk.StringVar(self)
-        self.tkvar_multi_single.set(options[0])
+        self.tkvar_multi_single.set(self.options[0])
         
-        self.ent_multi_single = tk.OptionMenu(self,self.tkvar_multi_single,*options)
-        self.ent_multi_single.grid(row=4,column=3,sticky="news")   
+        self.drb_multi_single = tk.OptionMenu(self,self.tkvar_multi_single,*self.options)
+        self.drb_multi_single.grid(row=4,column=3,sticky="news")   
 
         self.lbl_price = tk.Label(self,text="Price: ")
         self.lbl_price.grid(row=5,column=0,sticky="nes")
@@ -331,7 +332,10 @@ class EditEntryMenu(Screen):
         self.ent_date_purchased = tk.Entry(self)
         self.ent_date_purchased.grid(row=5,column=3,sticky="nws")           
         
-        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.tkvar_beaten = tk.BooleanVar(self)
+        self.tkvar_beaten.set(False)
+        
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.tkvar_beaten)
         self.chk_beaten.grid(row=6,column=3,sticky="nws")
         
         self.lbl_notes = tk.Label(self,text="Notes:")
@@ -375,27 +379,62 @@ class EditEntryMenu(Screen):
         self.ent_rating.delete(0,"end")
         self.ent_rating.insert(0,game[6])
         
+        player_mode = game[7]
+        if not player_mode in self.options:
+            player_mode = self.options[0]
+        self.tkvar_multi_single.set(player_mode)
+        
         self.ent_price.delete(0,"end")
         self.ent_price.insert(0,game[8])
+        
+        #Check for boolean data contained in is_beaten (game[9]) set data accordingly.
+        is_beaten = game[9]
+        is_beaten = str(is_beaten).lower() in ["true","yes","1"]
+        self.tkvar_beaten.set(is_beaten)
         
         self.ent_date_purchased.delete(0,"end")
         self.ent_date_purchased.insert(0,game[10])
         
-        self.scr_notes.delete(1.0,"end")
-        self.scr_notes.insert(1.0,game[11])
-        
-        print(game)
+        self.scr_notes.delete(0.0,"end")
+        self.scr_notes.insert(0.0,game[11])
         
     def go_cancel(self):
         Screen.current = 0
         Screen.switch_frame() 
         
     def reset(self):
-        print("Reset")    
+        self.update()    
         
     def confirm(self):
+        self.submit_edit()
         Screen.current = 0
-        Screen.switch_frame()      
+        Screen.switch_frame()   
+        
+    def submit_edit(self):
+        entry = []
+        
+        #Create a new entry and populate it with user input.
+        entry.append(self.ent_genre.get())          #0
+        entry.append(self.ent_title.get())          #1
+        entry.append(self.ent_company.get())        #2
+        entry.append(self.ent_publisher.get())      #3
+        entry.append(self.ent_console.get())        #4
+        entry.append(self.ent_release_year.get())   #5
+        entry.append(self.ent_rating.get())         #6
+        
+        #Check for default option if found save an empty string.
+        if not(self.tkvar_multi_single.get() == self.options[0]):
+            entry.append(self.tkvar_multi_single.get()) #7
+        else:
+            entry.append("")                        #7(Alt) 
+            
+        entry.append(self.ent_price.get())          #8
+        entry.append(str(self.tkvar_beaten.get()))  #9
+        entry.append(self.ent_date_purchased.get()) #10
+        entry.append(self.scr_notes.get(0.0,tk.END))#11
+        
+        games[self.edit_key] = entry
+        self.edit_key = 0
         
 class AddEntryMenu(Screen):
             
@@ -456,13 +495,13 @@ class AddEntryMenu(Screen):
             self.lbl_multi_single = tk.Label(self,text="Player Mode: ")
             self.lbl_multi_single.grid(row=4,column=2,sticky="nes")
             
-            options = ["Multi","Single"]
+            self.options = ["Please select an option.","Multi","Single","Both"]
             
             self.tkvar_multi_single = tk.StringVar(self)
-            self.tkvar_multi_single.set(options[0])
+            self.tkvar_multi_single.set(self.options[0])
             
-            self.ent_multi_single = tk.OptionMenu(self,self.tkvar_multi_single,*options)
-            self.ent_multi_single.grid(row=4,column=3,sticky="news")   
+            self.drb_multi_single = tk.OptionMenu(self,self.tkvar_multi_single,*self.options)
+            self.drb_multi_single.grid(row=4,column=3,sticky="news")   
     
             self.lbl_price = tk.Label(self,text="Price: ")
             self.lbl_price.grid(row=5,column=0,sticky="nes")
@@ -476,7 +515,10 @@ class AddEntryMenu(Screen):
             self.ent_date_purchased = tk.Entry(self)
             self.ent_date_purchased.grid(row=5,column=3,sticky="nws")           
             
-            self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+            self.tkvar_beaten = tk.BooleanVar(self)
+            self.tkvar_beaten.set(False)
+            
+            self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.tkvar_beaten)
             self.chk_beaten.grid(row=6,column=3,sticky="nws")
             
             self.lbl_notes = tk.Label(self,text="Notes:")
@@ -501,11 +543,48 @@ class AddEntryMenu(Screen):
             Screen.switch_frame() 
             
         def reset(self):
-            print("Reset")    
+            self.ent_title.delete(0,"end")
+            self.ent_genre.delete(0,"end")
+            self.ent_company.delete(0,"end")
+            self.ent_publisher.delete(0,"end")
+            self.ent_console.delete(0,"end")
+            self.ent_release_year.delete(0,"end")
+            self.ent_rating.delete(0,"end")
+            self.tkvar_multi_single.set(self.options[0])
+            self.ent_price.delete(0,"end")
+            self.tkvar_beaten.set(False)
+            self.ent_date_purchased.delete(0,"end")
+            self.scr_notes.delete(0.0,"end")   
             
         def go_confirm(self):
+            self.submit_edit()
             Screen.current = 0
             Screen.switch_frame()
+            
+        def submit_edit(self):
+            entry = []
+            
+            #Create a new entry and populate it with user input.
+            entry.append(self.ent_genre.get())          #0
+            entry.append(self.ent_title.get())          #1
+            entry.append(self.ent_company.get())        #2
+            entry.append(self.ent_publisher.get())      #3
+            entry.append(self.ent_console.get())        #4
+            entry.append(self.ent_release_year.get())   #5
+            entry.append(self.ent_rating.get())         #6
+            
+            #Check for default option if found save an empty string.
+            if not(self.tkvar_multi_single.get() == self.options[0]):
+                entry.append(self.tkvar_multi_single.get()) #7
+            else:
+                entry.append("")                        #7(Alt) 
+                
+            entry.append(self.ent_price.get())          #8
+            entry.append(str(self.tkvar_beaten.get()))  #9
+            entry.append(self.ent_date_purchased.get()) #10
+            entry.append(self.scr_notes.get(0.0,tk.END))#11
+            
+            games[len(games)+1] = entry          
         
 class RemoveSelectionMenu(tk.Frame):
     
