@@ -11,6 +11,8 @@ This program is used to keep track of game entrys, the ability to add/remove/edi
 import pickle
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+from tkinter import messagebox as mb
+
 #===[ Constant(s) ]===
 TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
@@ -73,11 +75,16 @@ class MainMenu(Screen):
         Screen.switch_frame()        
         
     def go_remove(self):
-        Screen.current = 4
-        Screen.switch_frame()    
+        #Screen.current = 4
+        #Screen.switch_frame()    
+        pop_up = tk.Tk()
+        pop_up.title("Remove Game")
+        removeSelect = RemoveSelectionMenu(master=pop_up)
+        removeSelect.grid(row=0,column=0,sticky="news")
         
     def go_save(self):
-        print("Saved")    
+        print("Saved")
+        mb.showinfo(message="Saved Entrys to File.")
 
 class SearchMenu(Screen):
     
@@ -94,11 +101,23 @@ class SearchMenu(Screen):
         self.lbl_search_by = tk.Label(self,text="Search by:")
         self.lbl_search_by.grid(row=1,column=0,sticky="sw")
         
-        options = ["Genre","Title","Company","Publisher","Console","Release Year","Rating","Multi/Single player","Price","Beaten","Date Purchase"]
+        self.options = [
+            "Genre",
+            "Title",
+            "Company",
+            "Publisher",
+            "Console",
+            "Release Year",
+            "Rating",
+            "Multi/Single player",
+            "Price",
+            "Beaten",
+            "Date Purchase"
+        ]
         self.tkvar_search_by = tk.StringVar(self)
-        self.tkvar_search_by.set(options[1])
+        self.tkvar_search_by.set(self.options[1])
         
-        self.dbx_search_by = tk.OptionMenu(self,self.tkvar_search_by,*options)
+        self.dbx_search_by = tk.OptionMenu(self,self.tkvar_search_by,*self.options)
         self.dbx_search_by.grid(row=2,column=0,sticky="new")           
         
         self.lbl_search_for = tk.Label(self,text="Search for:")
@@ -113,7 +132,7 @@ class SearchMenu(Screen):
         self.frm_filters = PrintFilters(self)
         self.frm_filters.grid(row=2,column=1,rowspan=3,columnspan=2,sticky="news")      
         
-        self.scr_search_results = ScrolledText(self,width=40,height=8)
+        self.scr_search_results = ScrolledText(self,width=40,height=8,state='disabled')
         self.scr_search_results.grid(row=5,column=0,columnspan=3,sticky="news")
         
         self.grid_rowconfigure(5,weight=1)
@@ -131,8 +150,11 @@ class SearchMenu(Screen):
         Screen.current = 0
         Screen.switch_frame() 
         
+    def update(self):
+        pass
+    
     def reset(self):
-        print("Reset")    
+        self.frm_filters.tkvar_title.set(False)    
         
     def submit(self):
         print("Yield Results")
@@ -142,40 +164,78 @@ class PrintFilters(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         
-        self.chk_title = tk.Checkbutton(self,text="Title")
+        self.tkvar_title = tk.BooleanVar(self)
+        self.tkvar_title.set(False)
+        
+        self.chk_title = tk.Checkbutton(self,text="Title",variable=self.tkvar_title)
         self.chk_title.grid(row=0,column=0,sticky="nsw")
         
-        self.chk_genre = tk.Checkbutton(self,text="Genre")
+        print(self.chk_title.getboolean(0))
+        
+        self.tkvar_genre = tk.BooleanVar(self)
+        self.tkvar_genre.set(False)        
+        
+        self.chk_genre = tk.Checkbutton(self,text="Genre",variable=self.tkvar_genre)
         self.chk_genre.grid(row=0,column=1,sticky="nsw")  
         
-        self.chk_company = tk.Checkbutton(self,text="Company")
+        self.tkvar_company = tk.BooleanVar(self)
+        self.tkvar_company.set(False)        
+        
+        self.chk_company = tk.Checkbutton(self,text="Company",variable=self.tkvar_company)
         self.chk_company.grid(row=0,column=2,sticky="nsw")        
         
-        self.chk_publisher = tk.Checkbutton(self,text="Publisher")
+        self.tkvar_publisher = tk.BooleanVar(self)
+        self.tkvar_publisher.set(False)        
+        
+        self.chk_publisher = tk.Checkbutton(self,text="Publisher",variable=self.tkvar_publisher)
         self.chk_publisher.grid(row=1,column=0,sticky="nsw")        
         
-        self.chk_release_year = tk.Checkbutton(self,text="Release Year")
+        self.tkvar_release_year = tk.BooleanVar(self)
+        self.tkvar_release_year.set(False)             
+        
+        self.chk_release_year = tk.Checkbutton(self,text="Release Year",variable=self.tkvar_release_year)
         self.chk_release_year.grid(row=1,column=1,sticky="nsw")        
         
-        self.chk_console = tk.Checkbutton(self,text="Console")
+        self.tkvar_console = tk.BooleanVar(self)
+        self.tkvar_console.set(False)         
+        
+        self.chk_console = tk.Checkbutton(self,text="Console",variable=self.tkvar_console)
         self.chk_console.grid(row=1,column=2,sticky="nsw")        
         
-        self.chk_rating = tk.Checkbutton(self,text="Rating")
+        self.tkvar_rating = tk.BooleanVar(self)
+        self.tkvar_rating.set(False)         
+        
+        self.chk_rating = tk.Checkbutton(self,text="Rating",variable=self.tkvar_rating)
         self.chk_rating.grid(row=2,column=0,sticky="nsw")
         
-        self.chk_single_multi = tk.Checkbutton(self,text="Single/Multi Player")
+        self.tkvar_single_multi = tk.BooleanVar(self)
+        self.tkvar_single_multi.set(False)         
+        
+        self.chk_single_multi = tk.Checkbutton(self,text="Single/Multi Player",variable=self.tkvar_single_multi)
         self.chk_single_multi.grid(row=2,column=1,sticky="nsw")         
         
-        self.chk_price = tk.Checkbutton(self,text="Price")
+        self.tkvar_price = tk.BooleanVar(self)
+        self.tkvar_price.set(False)        
+        
+        self.chk_price = tk.Checkbutton(self,text="Price",variable=self.tkvar_price)
         self.chk_price.grid(row=2,column=2,sticky="nsw")
         
-        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.tkvar_beaten = tk.BooleanVar(self)
+        self.tkvar_beaten.set(False)        
+        
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.tkvar_beaten)
         self.chk_beaten.grid(row=3,column=0,sticky="nsw")         
         
-        self.chk_purchase_date = tk.Checkbutton(self,text="Date Purchase")
+        self.tkvar_date_purchased = tk.BooleanVar(self)
+        self.tkvar_date_purchased.set(False)        
+        
+        self.chk_purchase_date = tk.Checkbutton(self,text="Date Purchase",variable=self.tkvar_date_purchased)
         self.chk_purchase_date.grid(row=3,column=1,sticky="nsw")
         
-        self.chk_notes = tk.Checkbutton(self,text="Notes")
+        self.tkvar_notes = tk.BooleanVar(self)
+        self.tkvar_notes.set(False)        
+        
+        self.chk_notes = tk.Checkbutton(self,text="Notes",variable=self.tkvar_notes)
         self.chk_notes.grid(row=3,column=2,sticky="nsw") 
         
 
@@ -529,16 +589,21 @@ class AddEntryMenu(Screen):
             
             self.grid_rowconfigure(7,weight=1)
             
+            self.lbl_error_msg = tk.Label(self,text="",fg="red")
+            self.lbl_error_msg.grid(row=9,column=1,columnspan=3,sticky="news")
+            #self.lbl_error_msg.configure(text="")
+            
             self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT,command=self.go_cancel)
-            self.btn_cancel.grid(row=9,column=1,sticky="news")
+            self.btn_cancel.grid(row=10,column=1,sticky="news")
             
             self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT,command=self.reset)
-            self.btn_reset.grid(row=9,column=2,sticky="news")        
+            self.btn_reset.grid(row=10,column=2,sticky="news")        
             
             self.btn_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_confirm)
-            self.btn_confirm.grid(row=9,column=3,sticky="news")
+            self.btn_confirm.grid(row=10,column=3,sticky="news")
             
         def go_cancel(self):
+            self.reset()
             Screen.current = 0
             Screen.switch_frame() 
             
@@ -554,18 +619,28 @@ class AddEntryMenu(Screen):
             self.ent_price.delete(0,"end")
             self.tkvar_beaten.set(False)
             self.ent_date_purchased.delete(0,"end")
-            self.scr_notes.delete(0.0,"end")   
+            self.scr_notes.delete(0.0,"end") 
+            
+            self.lbl_error_msg.configure(text="Title Required")
+            self.ent_title.configure(bg=self.ent_genre['bg'])            
             
         def go_confirm(self):
-            self.submit_edit()
+            if not self.create_entry():
+                return
+            self.reset()
             Screen.current = 0
             Screen.switch_frame()
+            mb.showinfo(message="Entry has been added.")
             
-        def submit_edit(self):
+        def create_entry(self):
             entry = []
             
             #Create a new entry and populate it with user input.
             entry.append(self.ent_genre.get())          #0
+            if self.ent_title.get() == "":
+                self.lbl_error_msg.configure(text="Title Required")
+                self.ent_title.configure(bg="red")
+                return False
             entry.append(self.ent_title.get())          #1
             entry.append(self.ent_company.get())        #2
             entry.append(self.ent_publisher.get())      #3
@@ -584,7 +659,8 @@ class AddEntryMenu(Screen):
             entry.append(self.ent_date_purchased.get()) #10
             entry.append(self.scr_notes.get(0.0,tk.END))#11
             
-            games[len(games)+1] = entry          
+            games[len(games)+1] = entry 
+            return True
         
 class RemoveSelectionMenu(tk.Frame):
     
@@ -598,12 +674,15 @@ class RemoveSelectionMenu(tk.Frame):
         self.lbl_title = tk.Label(self,text="Which title to remove?", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
-        options = ["one","two"]
+        self.options = ["Please select a title."]
+        
+        for key in games.keys():
+            self.options.append(games[key][1])
         
         self.tkvar_title = tk.StringVar(self)
-        self.tkvar_title.set(options[0])
+        self.tkvar_title.set(self.options[0])
         
-        self.dbx_title = tk.OptionMenu(self,self.tkvar_title,*options)
+        self.dbx_title = tk.OptionMenu(self,self.tkvar_title,*self.options)
         self.dbx_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
         self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT,command=self.go_back)
@@ -614,17 +693,27 @@ class RemoveSelectionMenu(tk.Frame):
         
     def go_back(self):
         Screen.current = 0
-        Screen.switch_frame()  
+        Screen.switch_frame()
+        self.master.destroy()
         
     def go_select(self):
-        Screen.current = 4
-        Screen.switch_frame()
+        if not(self.tkvar_title.get() == self.options[0]):
+            Screen.current = 4
+            for key in games.keys():
+                if games[key][1] == self.tkvar_title.get():
+                    screens[Screen.current].remove_key = key
+                    break
+            screens[Screen.current].update()
+            Screen.switch_frame()
+            self.master.destroy()
         
         
 class RemoveConfirmMenu(Screen):
     
     def __init__(self,master=None):
         Screen.__init__(self,master)
+        
+        self.remove_key = 0
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -651,6 +740,11 @@ class RemoveConfirmMenu(Screen):
     def go_confirm(self):
         Screen.current = 0
         Screen.switch_frame()
+        
+    def update(self):
+        screens[Screen.current].scr_marked_entrys.delete(0.0,tk.END)
+        screens[Screen.current].scr_marked_entrys.insert(0.0,games[self.remove_key][1])
+        #screens[Screen.current].scr_marked_entrys.insert(tk.END,games[key])        
         
 #===[ Global Function(s) ]===
 
