@@ -102,6 +102,7 @@ class SearchMenu(Screen):
         self.lbl_search_by.grid(row=1,column=0,sticky="sw")
         
         self.options = [
+            "Please select a option.",
             "Genre",
             "Title",
             "Company",
@@ -115,7 +116,7 @@ class SearchMenu(Screen):
             "Date Purchase"
         ]
         self.tkvar_search_by = tk.StringVar(self)
-        self.tkvar_search_by.set(self.options[1])
+        self.tkvar_search_by.set(self.options[0])
         
         self.dbx_search_by = tk.OptionMenu(self,self.tkvar_search_by,*self.options)
         self.dbx_search_by.grid(row=2,column=0,sticky="new")           
@@ -132,7 +133,7 @@ class SearchMenu(Screen):
         self.frm_filters = PrintFilters(self)
         self.frm_filters.grid(row=2,column=1,rowspan=3,columnspan=2,sticky="news")      
         
-        self.scr_search_results = ScrolledText(self,width=40,height=8,state='disabled')
+        self.scr_search_results = ScrolledText(self,width=40,height=8)
         self.scr_search_results.grid(row=5,column=0,columnspan=3,sticky="news")
         
         self.grid_rowconfigure(5,weight=1)
@@ -149,15 +150,53 @@ class SearchMenu(Screen):
     def go_back(self):
         Screen.current = 0
         Screen.switch_frame() 
-        
-    def update(self):
-        pass
     
     def reset(self):
-        self.frm_filters.tkvar_title.set(False)    
+        #self.frm_filters.tkvar_title.set(False)
+        self.frm_filters.reset()
+        self.ent_search_for.delete(0,tk.END)
+        self.scr_search_results.delete(0.0,tk.END)
         
     def submit(self):
         print("Yield Results")
+        #Delete previous info
+        self.scr_search_results.delete(0.0,tk.END)
+        
+        #Get search_index
+        search_index = -1
+        for i in range(1,len(self.options)+1):
+            if self.options[i] == self.tkvar_search_by.get():
+                search_index = i-1
+                break
+            
+        search_for = self.ent_search_for.get()
+        filters = self.frm_filters.get_filters()
+        for key in games.keys():
+            game = games[key]
+            if search_for.lower() in game[search_index].lower():    
+                self.display_game(game,filters)
+            
+    #Display the given game using the given filters.
+    def display_game(self,game,filters):
+        prefix = [
+            "Genre",
+            "Title",
+            "Company",
+            "Publisher",
+            "Console",
+            "Release Year",
+            "Rating",
+            "Multi/Single player",
+            "Price",
+            "Beaten",
+            "Date Purchase",
+            "Notes"
+        ]
+        for j in range(len(filters)):
+            if filters[j]:
+                self.scr_search_results.insert(tk.END,prefix[j]+": "+game[j]+"\n")
+        self.scr_search_results.insert(tk.END,"\n")
+            
 
 class PrintFilters(tk.Frame):
     
@@ -169,8 +208,6 @@ class PrintFilters(tk.Frame):
         
         self.chk_title = tk.Checkbutton(self,text="Title",variable=self.tkvar_title)
         self.chk_title.grid(row=0,column=0,sticky="nsw")
-        
-        print(self.chk_title.getboolean(0))
         
         self.tkvar_genre = tk.BooleanVar(self)
         self.tkvar_genre.set(False)        
@@ -238,6 +275,35 @@ class PrintFilters(tk.Frame):
         self.chk_notes = tk.Checkbutton(self,text="Notes",variable=self.tkvar_notes)
         self.chk_notes.grid(row=3,column=2,sticky="nsw") 
         
+    def reset(self):
+        self.tkvar_beaten.set(False)
+        self.tkvar_company.set(False)
+        self.tkvar_console.set(False)
+        self.tkvar_date_purchased.set(False)
+        self.tkvar_genre.set(False)
+        self.tkvar_notes.set(False)
+        self.tkvar_price.set(False)
+        self.tkvar_publisher.set(False)
+        self.tkvar_rating.set(False)
+        self.tkvar_release_year.set(False)
+        self.tkvar_single_multi.set(False)
+        self.tkvar_title.set(False)
+        
+    def get_filters(self):
+        return [
+            self.tkvar_genre.get(),
+            self.tkvar_title.get(),
+            self.tkvar_company.get(),
+            self.tkvar_publisher.get(),
+            self.tkvar_console.get(),
+            self.tkvar_release_year.get(),
+            self.tkvar_rating.get(),
+            self.tkvar_single_multi.get(),
+            self.tkvar_price.get(),
+            self.tkvar_date_purchased.get(),
+            self.tkvar_beaten.get(),
+            self.tkvar_notes.get()
+            ]
 
 '''class FileSaved(Screen):
     
