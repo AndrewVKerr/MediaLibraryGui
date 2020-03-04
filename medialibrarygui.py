@@ -42,19 +42,19 @@ class MainMenu(Screen):
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
         self.btn_add = tk.Button(self,text="Add",font=BUTTON_FONT,command=self.go_add)
-        self.btn_add.grid(row=1,column=1)
+        self.btn_add.grid(row=1,column=1,sticky="news")
         
         self.btn_edit = tk.Button(self,text="Edit",font=BUTTON_FONT,command=self.go_edit)
-        self.btn_edit.grid(row=2,column=1) 
+        self.btn_edit.grid(row=2,column=1,sticky="news") 
         
         self.btn_search = tk.Button(self,text="Search",font=BUTTON_FONT,command=self.go_search)
-        self.btn_search.grid(row=3,column=1)
+        self.btn_search.grid(row=3,column=1,sticky="news")
         
         self.btn_remove = tk.Button(self,text="Remove",font=BUTTON_FONT,command=self.go_remove)
-        self.btn_remove.grid(row=4,column=1)
+        self.btn_remove.grid(row=4,column=1,sticky="news")
         
         self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT,command=self.go_save)
-        self.btn_save.grid(row=5,column=1)    
+        self.btn_save.grid(row=5,column=1,sticky="news")    
         
     def go_add(self):
         Screen.current = 1
@@ -68,10 +68,9 @@ class MainMenu(Screen):
         editSelect = EditSelectionMenu(master=pop_up)
         editSelect.grid(row=0,column=0,sticky="news")
         
-        
-        
     def go_search(self):
         Screen.current = 3
+        screens[Screen.current].reset()
         Screen.switch_frame()        
         
     def go_remove(self):
@@ -84,9 +83,27 @@ class MainMenu(Screen):
         
     def go_save(self):
         print("Saved")
+        datafile = open("game_lib.pickle","wb")
+        pickle.dump(games,datafile)
+        datafile.close()
         mb.showinfo(message="Saved Entrys to File.")
 
 class SearchMenu(Screen):
+    
+    prefix = [
+        "Genre",
+        "Title",
+        "Company",
+        "Publisher",
+        "Console",
+        "Release Year",
+        "Rating",
+        "Multi/Single player",
+        "Price",
+        "Beaten",
+        "Date Purchase",
+        "Notes"
+    ]    
     
     def __init__(self,master=None):
         Screen.__init__(self,master)
@@ -102,7 +119,7 @@ class SearchMenu(Screen):
         self.lbl_search_by.grid(row=1,column=0,sticky="sw")
         
         self.options = [
-            "Please select a option.",
+            "Select Option",
             "Genre",
             "Title",
             "Company",
@@ -156,6 +173,8 @@ class SearchMenu(Screen):
         self.frm_filters.reset()
         self.ent_search_for.delete(0,tk.END)
         self.scr_search_results.delete(0.0,tk.END)
+        for key in games.keys():
+            self.display_game(games[key])
         
     def submit(self):
         print("Yield Results")
@@ -170,32 +189,68 @@ class SearchMenu(Screen):
                 break
             
         search_for = self.ent_search_for.get()
-        filters = self.frm_filters.get_filters()
         for key in games.keys():
             game = games[key]
             if search_for.lower() in game[search_index].lower():    
-                self.display_game(game,filters)
+                self.display_game(game)
             
     #Display the given game using the given filters.
-    def display_game(self,game,filters):
-        prefix = [
-            "Genre",
-            "Title",
-            "Company",
-            "Publisher",
-            "Console",
-            "Release Year",
-            "Rating",
-            "Multi/Single player",
-            "Price",
-            "Beaten",
-            "Date Purchase",
-            "Notes"
-        ]
-        for j in range(len(filters)):
-            if filters[j]:
-                self.scr_search_results.insert(tk.END,prefix[j]+": "+game[j]+"\n")
-        self.scr_search_results.insert(tk.END,"\n")
+    def display_game(self,game):      
+        if self.frm_filters.tkvar_genre.get() == True:
+            msg = "Genre:\t\t"+game[0]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+        
+        if self.frm_filters.tkvar_title.get() == True:
+            msg = "Title:\t\t"+game[1]+"\n"
+            self.scr_search_results.insert(tk.END,msg)  
+        
+        if self.frm_filters.tkvar_company.get() == True:
+            msg = "Company:\t\t"+game[2]+"\n"
+            self.scr_search_results.insert(tk.END,msg)        
+        
+        if self.frm_filters.tkvar_publisher.get() == True:
+            msg = "Publisher:\t\t"+game[3]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_console.get() == True:
+            msg = "Console:\t\t"+game[4]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_release_year.get() == True:
+            msg = "Release Year:\t\t"+game[5]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_rating.get() == True:
+            msg = "Rating:\t\t"+game[6]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_single_multi.get() == True:
+            msg = "Single/Multi:\t\t"+game[7]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_price.get() == True:
+            msg = "Price:\t\t"+game[8]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_beaten.get() == True:
+            msg = "Beaten:\t\t"+game[9]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_date_purchased.get() == True:
+            msg = "Date Purchased:\t"+game[10]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+            
+        if self.frm_filters.tkvar_notes.get() == True:
+            msg = "Notes:\t\t"+game[11]+"\n"
+            self.scr_search_results.insert(tk.END,msg)
+        
+        # Looped Print (ALT)
+        # Add filters parameter and pass self.frm_filters.get_filters() or call it in this function
+        #-------------------------------------------------------------------------------------------
+        #for j in range(len(filters)):
+        #    if filters[j]:
+        #        self.scr_search_results.insert(tk.END,SearchMenu.prefix[j]+": "+game[j]+"\n")
+        self.scr_search_results.insert(tk.END,"-"*67+"\n")
             
 
 class PrintFilters(tk.Frame):
@@ -204,90 +259,90 @@ class PrintFilters(tk.Frame):
         tk.Frame.__init__(self,master)
         
         self.tkvar_title = tk.BooleanVar(self)
-        self.tkvar_title.set(False)
+        self.tkvar_title.set(True)
         
         self.chk_title = tk.Checkbutton(self,text="Title",variable=self.tkvar_title)
         self.chk_title.grid(row=0,column=0,sticky="nsw")
         
         self.tkvar_genre = tk.BooleanVar(self)
-        self.tkvar_genre.set(False)        
+        self.tkvar_genre.set(True)        
         
         self.chk_genre = tk.Checkbutton(self,text="Genre",variable=self.tkvar_genre)
         self.chk_genre.grid(row=0,column=1,sticky="nsw")  
         
         self.tkvar_company = tk.BooleanVar(self)
-        self.tkvar_company.set(False)        
+        self.tkvar_company.set(True)        
         
         self.chk_company = tk.Checkbutton(self,text="Company",variable=self.tkvar_company)
         self.chk_company.grid(row=0,column=2,sticky="nsw")        
         
         self.tkvar_publisher = tk.BooleanVar(self)
-        self.tkvar_publisher.set(False)        
+        self.tkvar_publisher.set(True)        
         
         self.chk_publisher = tk.Checkbutton(self,text="Publisher",variable=self.tkvar_publisher)
         self.chk_publisher.grid(row=1,column=0,sticky="nsw")        
         
         self.tkvar_release_year = tk.BooleanVar(self)
-        self.tkvar_release_year.set(False)             
+        self.tkvar_release_year.set(True)             
         
         self.chk_release_year = tk.Checkbutton(self,text="Release Year",variable=self.tkvar_release_year)
         self.chk_release_year.grid(row=1,column=1,sticky="nsw")        
         
         self.tkvar_console = tk.BooleanVar(self)
-        self.tkvar_console.set(False)         
+        self.tkvar_console.set(True)         
         
         self.chk_console = tk.Checkbutton(self,text="Console",variable=self.tkvar_console)
         self.chk_console.grid(row=1,column=2,sticky="nsw")        
         
         self.tkvar_rating = tk.BooleanVar(self)
-        self.tkvar_rating.set(False)         
+        self.tkvar_rating.set(True)         
         
         self.chk_rating = tk.Checkbutton(self,text="Rating",variable=self.tkvar_rating)
         self.chk_rating.grid(row=2,column=0,sticky="nsw")
         
         self.tkvar_single_multi = tk.BooleanVar(self)
-        self.tkvar_single_multi.set(False)         
+        self.tkvar_single_multi.set(True)         
         
         self.chk_single_multi = tk.Checkbutton(self,text="Single/Multi Player",variable=self.tkvar_single_multi)
         self.chk_single_multi.grid(row=2,column=1,sticky="nsw")         
         
         self.tkvar_price = tk.BooleanVar(self)
-        self.tkvar_price.set(False)        
+        self.tkvar_price.set(True)        
         
         self.chk_price = tk.Checkbutton(self,text="Price",variable=self.tkvar_price)
         self.chk_price.grid(row=2,column=2,sticky="nsw")
         
         self.tkvar_beaten = tk.BooleanVar(self)
-        self.tkvar_beaten.set(False)        
+        self.tkvar_beaten.set(True)        
         
         self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.tkvar_beaten)
         self.chk_beaten.grid(row=3,column=0,sticky="nsw")         
         
         self.tkvar_date_purchased = tk.BooleanVar(self)
-        self.tkvar_date_purchased.set(False)        
+        self.tkvar_date_purchased.set(True)        
         
         self.chk_purchase_date = tk.Checkbutton(self,text="Date Purchase",variable=self.tkvar_date_purchased)
         self.chk_purchase_date.grid(row=3,column=1,sticky="nsw")
         
         self.tkvar_notes = tk.BooleanVar(self)
-        self.tkvar_notes.set(False)        
+        self.tkvar_notes.set(True)        
         
         self.chk_notes = tk.Checkbutton(self,text="Notes",variable=self.tkvar_notes)
         self.chk_notes.grid(row=3,column=2,sticky="nsw") 
         
     def reset(self):
-        self.tkvar_beaten.set(False)
-        self.tkvar_company.set(False)
-        self.tkvar_console.set(False)
-        self.tkvar_date_purchased.set(False)
-        self.tkvar_genre.set(False)
-        self.tkvar_notes.set(False)
-        self.tkvar_price.set(False)
-        self.tkvar_publisher.set(False)
-        self.tkvar_rating.set(False)
-        self.tkvar_release_year.set(False)
-        self.tkvar_single_multi.set(False)
-        self.tkvar_title.set(False)
+        self.tkvar_beaten.set(True)
+        self.tkvar_company.set(True)
+        self.tkvar_console.set(True)
+        self.tkvar_date_purchased.set(True)
+        self.tkvar_genre.set(True)
+        self.tkvar_notes.set(True)
+        self.tkvar_price.set(True)
+        self.tkvar_publisher.set(True)
+        self.tkvar_rating.set(True)
+        self.tkvar_release_year.set(True)
+        self.tkvar_single_multi.set(True)
+        self.tkvar_title.set(True)
         
     def get_filters(self):
         return [
@@ -803,13 +858,22 @@ class RemoveConfirmMenu(Screen):
         Screen.current = 0
         Screen.switch_frame() 
         
+    def remove_and_compact(self):
+        selected_key = self.remove_key
+        while selected_key+1 in games:
+            games[selected_key] = games[selected_key+1]
+            selected_key+=1
+        games.pop(selected_key)
+        
     def go_confirm(self):
+        self.remove_and_compact()
         Screen.current = 0
         Screen.switch_frame()
         
     def update(self):
         screens[Screen.current].scr_marked_entrys.delete(0.0,tk.END)
-        screens[Screen.current].scr_marked_entrys.insert(0.0,games[self.remove_key][1])
+        for i in range(len(games[self.remove_key])):
+            screens[Screen.current].scr_marked_entrys.insert(tk.END,SearchMenu.prefix[i]+": "+games[self.remove_key][i]+"\n")
         #screens[Screen.current].scr_marked_entrys.insert(tk.END,games[key])        
         
 #===[ Global Function(s) ]===
