@@ -39,22 +39,26 @@ class MainMenu(Screen):
         self.grid_columnconfigure(2, weight=1)        
         
         self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
-        self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
+        self.lbl_title.grid(row=1,column=0,columnspan=3,sticky="news")
         
         self.btn_add = tk.Button(self,text="Add",font=BUTTON_FONT,command=self.go_add)
-        self.btn_add.grid(row=1,column=1,sticky="news")
+        self.btn_add.grid(row=2,column=1,sticky="news")
         
         self.btn_edit = tk.Button(self,text="Edit",font=BUTTON_FONT,command=self.go_edit)
-        self.btn_edit.grid(row=2,column=1,sticky="news") 
+        self.btn_edit.grid(row=3,column=1,sticky="news") 
         
         self.btn_search = tk.Button(self,text="Search",font=BUTTON_FONT,command=self.go_search)
-        self.btn_search.grid(row=3,column=1,sticky="news")
+        self.btn_search.grid(row=4,column=1,sticky="news")
         
         self.btn_remove = tk.Button(self,text="Remove",font=BUTTON_FONT,command=self.go_remove)
-        self.btn_remove.grid(row=4,column=1,sticky="news")
+        self.btn_remove.grid(row=5,column=1,sticky="news")
         
         self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT,command=self.go_save)
-        self.btn_save.grid(row=5,column=1,sticky="news")    
+        self.btn_save.grid(row=6,column=1,sticky="news") 
+        
+        self.grid_rowconfigure(0,weight=2)
+        self.grid_rowconfigure(1,weight=1)
+        self.grid_rowconfigure(7,weight=2)
         
     def go_add(self):
         Screen.current = 1
@@ -183,7 +187,7 @@ class SearchMenu(Screen):
         
         #Get search_index
         search_index = -1
-        for i in range(1,len(self.options)+1):
+        for i in range(0,len(self.options)+1):
             if self.options[i] == self.tkvar_search_by.get():
                 search_index = i-1
                 break
@@ -191,8 +195,11 @@ class SearchMenu(Screen):
         search_for = self.ent_search_for.get()
         for key in games.keys():
             game = games[key]
-            if search_for.lower() in game[search_index].lower():    
+            if(search_index == -1):
                 self.display_game(game)
+            else:
+                if search_for.lower() in game[search_index].lower():    
+                    self.display_game(game)
             
     #Display the given game using the given filters.
     def display_game(self,game):      
@@ -710,18 +717,15 @@ class AddEntryMenu(Screen):
             
             self.grid_rowconfigure(7,weight=1)
             
-            self.lbl_error_msg = tk.Label(self,text="",fg="red")
-            self.lbl_error_msg.grid(row=9,column=1,columnspan=3,sticky="news")
-            #self.lbl_error_msg.configure(text="")
             
             self.btn_cancel = tk.Button(self,text="Cancel",font=BUTTON_FONT,command=self.go_cancel)
-            self.btn_cancel.grid(row=10,column=1,sticky="news")
+            self.btn_cancel.grid(row=9,column=1,sticky="news")
             
             self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT,command=self.reset)
-            self.btn_reset.grid(row=10,column=2,sticky="news")        
+            self.btn_reset.grid(row=9,column=2,sticky="news")        
             
             self.btn_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_confirm)
-            self.btn_confirm.grid(row=10,column=3,sticky="news")
+            self.btn_confirm.grid(row=9,column=3,sticky="news")
             
         def go_cancel(self):
             self.reset()
@@ -740,10 +744,7 @@ class AddEntryMenu(Screen):
             self.ent_price.delete(0,"end")
             self.tkvar_beaten.set(False)
             self.ent_date_purchased.delete(0,"end")
-            self.scr_notes.delete(0.0,"end") 
-            
-            self.lbl_error_msg.configure(text="Title Required")
-            self.ent_title.configure(bg=self.ent_genre['bg'])            
+            self.scr_notes.delete(0.0,"end")        
             
         def go_confirm(self):
             if not self.create_entry():
@@ -756,12 +757,16 @@ class AddEntryMenu(Screen):
         def create_entry(self):
             entry = []
             
+            if(self.ent_title.get()==""):
+                pop_up = tk.Tk()
+                pop_up.title("Error")
+                msg = "Error, select a title."
+                frm_error = ErrorMessage(pop_up,msg)
+                frm_error.grid(row=0,column=0)
+                return
+            
             #Create a new entry and populate it with user input.
             entry.append(self.ent_genre.get())          #0
-            if self.ent_title.get() == "":
-                self.lbl_error_msg.configure(text="Title Required")
-                self.ent_title.configure(bg="red")
-                return False
             entry.append(self.ent_title.get())          #1
             entry.append(self.ent_company.get())        #2
             entry.append(self.ent_publisher.get())      #3
@@ -876,6 +881,22 @@ class RemoveConfirmMenu(Screen):
             screens[Screen.current].scr_marked_entrys.insert(tk.END,SearchMenu.prefix[i]+": "+games[self.remove_key][i]+"\n")
         #screens[Screen.current].scr_marked_entrys.insert(tk.END,games[key])        
         
+class ErrorMessage(tk.Frame):
+    
+    def __init__(self,parent,msg='generic'):
+        tk.Frame.__init__(self,master=parent)
+        self.parent = parent;
+        
+        self.lbl_continue = tk.Label(self,text=msg)
+        self.lbl_continue.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        self.btn_ok = tk.Button(self,text="OK",command=self.master.destroy)
+        self.btn_ok.grid(row=1,column=1)
+        
+        self.grid_columnconfigure(0,weight=1)
+        self.grid_columnconfigure(1,weight=1)
+        self.grid_columnconfigure(2,weight=1)
+        
 #===[ Global Function(s) ]===
 
 #===[ Main ]===
@@ -901,3 +922,19 @@ if __name__ == "__main__":
     screens[0].tkraise()
     
     root.mainloop()
+    
+class Example(object):
+    
+    example_class_variable = 35
+    
+    def __init__(self):
+        example_local_variable = 15
+        self.example_object_variable = 100
+        
+    def example_class_function():
+        print("Class function ran")
+        print(example_local_variable) # < I dont exist here.
+        
+    def example_object_function(self):
+        print("Object function ran: ",self)
+        print(example_local_variable) # < I dont exist here.
